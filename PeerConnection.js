@@ -45,18 +45,28 @@ var PeerConnection = function (options) {
 
     return {
         createOffer: function (callback) {
-            peerConnection.createOffer(function (sessionDescription) {
+            peerConnection.createOffer({
+                offerToReceiveAudio: true,
+                offerToReceiveVideo: true
+            }).then(function (sessionDescription) {
+                console.log('--------creating offer sdp:');
+                console.log(sessionDescription.sdp);
                 peerConnection.setLocalDescription(sessionDescription);
                 callback(sessionDescription);
-            }, null, constraints);
+            })
         },
 
         createAnswer: function (offerSDP, callback) {
             peerConnection.setRemoteDescription(new SessionDescription(offerSDP));
-            peerConnection.createAnswer(function (sessionDescription) {
+            peerConnection.createAnswer({
+                offerToReceiveAudio: true,
+                offerToReceiveVideo: true
+            }).then(function (sessionDescription) {
+                console.log('--------creating answer sdp:');
+                console.log(sessionDescription.sdp);
                 peerConnection.setLocalDescription(sessionDescription);
                 callback(sessionDescription);
-            }, null, constraints);
+            })
         },
 
         setRemoteDescription: function (sdp) {

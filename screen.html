@@ -33,18 +33,15 @@ var config = {
     video: document.getElementById('remote-video'),
 };
 
-navigator.getUserMedia({
-        audio: true,
-        video: true
-    },
-    function (localStream) {
-        video = document.getElementById('local-video');
-        console.log('localStream', localStream);
-        video.srcObject = localStream;
-        config.localStream = localStream;
-    },
-    function (e) { console.error(e); }
-);
+navigator.mediaDevices.getDisplayMedia({
+  video: { cursor: "always" }, // 显示光标
+  audio: false // 是否共享音频（如标签页音频）
+}).then(function (localStream) {
+    video = document.getElementById('local-video');
+    console.log('localStream', localStream);
+    video.srcObject = localStream;
+    config.localStream = localStream;
+}).catch(function (e) { console.error(e); });
 
 var callPeer = call(config);
     </script>
